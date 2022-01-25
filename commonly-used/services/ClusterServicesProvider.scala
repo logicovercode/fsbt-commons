@@ -18,14 +18,14 @@ trait ClusterServicesProvider extends ClusterBuilderDefinitions {
     def rootSshClusterService(cluster: Cluster, imagePullTimeoutInMinutes: Int, containerStartTimeoutInMinutes: Int): SbtMicroservice = {
 
       val masterNodeDescription = SbtServiceDescription(
-        cluster.masterNode.sshNodeDefinition(Option("root")),
+        cluster.masterNode.sshNodeDefinition(),
         imagePullTimeoutInMinutes.minutes,
         containerStartTimeoutInMinutes.minutes
       )
 
       val slaveDescriptionSet = cluster.workerNodes.map { slaveNode =>
         SbtServiceDescription(
-          slaveNode.sshNodeDefinition(Option("root")),
+          slaveNode.sshNodeDefinition(),
           imagePullTimeoutInMinutes.minutes,
           containerStartTimeoutInMinutes.minutes
         )
@@ -39,14 +39,14 @@ trait ClusterServicesProvider extends ClusterBuilderDefinitions {
     def sshClusterService(cluster: Cluster, imagePullTimeoutInMinutes: Int, containerStartTimeoutInMinutes: Int): SbtMicroservice = {
 
       val masterNodeDescription = SbtServiceDescription(
-        cluster.masterNode.sshNodeDefinition(Option("hduser")),
+        cluster.masterNode.sshNodeDefinition(),
         imagePullTimeoutInMinutes.minutes,
         containerStartTimeoutInMinutes.minutes
       )
 
       val slaveDescriptionSet = cluster.workerNodes.map { slaveNode =>
         SbtServiceDescription(
-          slaveNode.sshNodeDefinition(Option("hduser")),
+          slaveNode.sshNodeDefinition(),
           imagePullTimeoutInMinutes.minutes,
           containerStartTimeoutInMinutes.minutes
         )
@@ -60,14 +60,14 @@ trait ClusterServicesProvider extends ClusterBuilderDefinitions {
     def kafkaClusterService(cluster: Cluster, imagePullTimeoutInMinutes: Int, containerStartTimeoutInMinutes: Int): SbtMicroservice = {
 
       val masterNodeDescription = SbtServiceDescription(
-        cluster.masterNode.kafkaNodeDefinition(Option("kuser")),
+        cluster.masterNode.kafkaNodeDefinition(),
         imagePullTimeoutInMinutes.minutes,
         containerStartTimeoutInMinutes.minutes
       )
 
       val slaveDescriptionSet = cluster.workerNodes.map { slaveNode =>
         SbtServiceDescription(
-          slaveNode.kafkaNodeDefinition(Option("hduser")),
+          slaveNode.kafkaNodeDefinition(),
           imagePullTimeoutInMinutes.minutes,
           containerStartTimeoutInMinutes.minutes
         )
@@ -82,7 +82,7 @@ trait ClusterServicesProvider extends ClusterBuilderDefinitions {
 
       var dataNodeHttpPort = 6661
       val masterNodeDescription = SbtServiceDescription(
-        cluster.masterNode.hdfsMasterNodeDefinition(Option(dataNodeHttpPort), Option("hduser")),
+        cluster.masterNode.hdfsMasterNodeDefinition(Option(dataNodeHttpPort)),
         imagePullTimeoutInMinutes.minutes,
         containerStartTimeoutInMinutes.minutes
       )
@@ -90,7 +90,7 @@ trait ClusterServicesProvider extends ClusterBuilderDefinitions {
       val slaveDescriptionSet = cluster.workerNodes.map { slaveNode =>
         dataNodeHttpPort = dataNodeHttpPort + 1
         SbtServiceDescription(
-          slaveNode.hdfsSlaveNodeDefinition(Option(dataNodeHttpPort), Option("hduser")),
+          slaveNode.hdfsSlaveNodeDefinition(Option(dataNodeHttpPort)),
           imagePullTimeoutInMinutes.minutes,
           containerStartTimeoutInMinutes.minutes
         )
@@ -119,7 +119,7 @@ trait ClusterServicesProvider extends ClusterBuilderDefinitions {
 
       var dataNodeHttpPort = 6661
       val masterNodeDescription = SbtServiceDescription(
-        cluster.masterNode.sparkMasterNodeDefinition(Option(dataNodeHttpPort), Option("hduser")),
+        cluster.masterNode.sparkMasterNodeDefinition(Option(dataNodeHttpPort)),
         imagePullTimeoutInMinutes.minutes,
         containerStartTimeoutInMinutes.minutes
       )
@@ -127,7 +127,7 @@ trait ClusterServicesProvider extends ClusterBuilderDefinitions {
       val slaveDescriptionSet = cluster.workerNodes.map { slaveNode =>
         dataNodeHttpPort = dataNodeHttpPort + 1
         SbtServiceDescription(
-          slaveNode.sparkWorkerNodeDefinition(Option(dataNodeHttpPort), Option("hduser")),
+          slaveNode.sparkWorkerNodeDefinition(Option(dataNodeHttpPort)),
           imagePullTimeoutInMinutes.minutes,
           containerStartTimeoutInMinutes.minutes
         )
@@ -158,7 +158,7 @@ trait ClusterServicesProvider extends ClusterBuilderDefinitions {
 
       var dataNodeHttpPort = 6661
       val masterNodeDescription = SbtServiceDescription(
-        cluster.masterNode.hdfsMasterNodeDefinition(Option(dataNodeHttpPort), Option("hduser")),
+        cluster.masterNode.hdfsMasterNodeDefinition(Option(dataNodeHttpPort)),
         imagePullTimeoutInMinutes.minutes,
         containerStartTimeoutInMinutes.minutes
       )
@@ -166,7 +166,7 @@ trait ClusterServicesProvider extends ClusterBuilderDefinitions {
       val slaveDescriptionSet = cluster.workerNodes.map { slaveNode =>
         dataNodeHttpPort = dataNodeHttpPort + 1
         SbtServiceDescription(
-          slaveNode.hdfsSlaveNodeDefinition(Option(dataNodeHttpPort), Option("hduser")),
+          slaveNode.hdfsSlaveNodeDefinition(Option(dataNodeHttpPort)),
           imagePullTimeoutInMinutes.minutes,
           containerStartTimeoutInMinutes.minutes
         )
@@ -175,23 +175,6 @@ trait ClusterServicesProvider extends ClusterBuilderDefinitions {
       val mysqlSbtServiceDescription =
         SbtServiceDescription(mysqlContainer, imagePullTimeoutInMinutes.minutes, containerStartTimeoutInMinutes.minutes)
       ClusterService(Seq(masterNodeDescription) ++ Seq(mysqlSbtServiceDescription) ++ slaveDescriptionSet)
-    }
-  }
-
-  implicit class ClusterExtension(cluster: Cluster) {
-
-    def serviceTimeouts(imagePullTimeoutInMinutes: Int, containerStartTimeoutInMinutes: Int): SbtMicroservice = {
-      cluster.clusterType match {
-        case SshCluster => CreateSshClusterService.sshClusterService(cluster, imagePullTimeoutInMinutes, containerStartTimeoutInMinutes)
-        case RootSshCluster =>
-          CreateRootSshClusterService.rootSshClusterService(cluster, imagePullTimeoutInMinutes, containerStartTimeoutInMinutes)
-        case HdfsCluster => CreateHdfsClusterService.hdfsClusterService(cluster, imagePullTimeoutInMinutes, containerStartTimeoutInMinutes)
-        case HiveCluster => CreateHiveClusterService.hiveClusterService(cluster, imagePullTimeoutInMinutes, containerStartTimeoutInMinutes)
-        case SparkCluster =>
-          CreateSparkClusterService.sparkClusterService(cluster, imagePullTimeoutInMinutes, containerStartTimeoutInMinutes)
-        case KafkaCluster =>
-          CreateKafkaClusterService.kafkaClusterService(cluster, imagePullTimeoutInMinutes, containerStartTimeoutInMinutes)
-      }
     }
   }
 }

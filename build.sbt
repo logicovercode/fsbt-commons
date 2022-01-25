@@ -26,3 +26,6 @@ idePackagePrefix := Some("com.logicovercode.fsbt.commons")
 lazy val fSbtCommonsProject = (project in file("."))
   .settings(sbtBuild.settings)
   //.dependsOn(fSbtAdtsModule)
+
+(publishLocal) := ( (publishLocal).toTask dependsOn (Compile / scalafmt) dependsOn (Test / test) ).value
+

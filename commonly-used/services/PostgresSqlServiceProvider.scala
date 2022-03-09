@@ -112,7 +112,7 @@ trait PostgresSqlServiceProvider {
       val imageName: String = "postgres:latest"
       val dbContainerPort = 5432
 
-      val dbContainer = ContainerDefinition(None, "postgres", "latest", Option(containerName))
+      val dbContainer = ContainerDefinition("postgres", "latest", Option(containerName), None)
         .withEnv(
           s"POSTGRES_DB=$databaseName",
           s"POSTGRES_USER=$dbUserName",

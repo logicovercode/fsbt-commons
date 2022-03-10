@@ -15,7 +15,7 @@ trait MySqlServiceProvider {
         userName: String,
         dbPassword: String,
         dbInitDirectory: String
-    ): SbtMicroservice = {
+    ): SbtService = {
 
       mysqlSbtServiceDescription(
         containerName,
@@ -37,7 +37,7 @@ trait MySqlServiceProvider {
         dbPassword: String,
         hostPort: Int,
         dbInitDirectory: String
-    ): SbtMicroservice = {
+    ): SbtService = {
 
       mysqlSbtServiceDescription(
         containerName,
@@ -52,12 +52,12 @@ trait MySqlServiceProvider {
       )
     }
 
-    def apply(containerName: String, databaseName: String, userName: String, dbPassword: String): SbtMicroservice = {
+    def apply(containerName: String, databaseName: String, userName: String, dbPassword: String): SbtService = {
 
       mysqlSbtServiceDescription(containerName, databaseName, userName, dbPassword, 3306, DockerNetwork("bridge"), None, 5, 5)
     }
 
-    def apply(containerName: String, databaseName: String, userName: String, dbPassword: String, hostPort: Int): SbtMicroservice = {
+    def apply(containerName: String, databaseName: String, userName: String, dbPassword: String, hostPort: Int): SbtService = {
 
       mysqlSbtServiceDescription(containerName, databaseName, userName, dbPassword, hostPort, DockerNetwork("bridge"), None, 5, 5)
     }
@@ -69,7 +69,7 @@ trait MySqlServiceProvider {
         dbPassword: String,
         hostPort: Int,
         network: DockerNetwork
-    ): SbtMicroservice = {
+    ): SbtService = {
 
       mysqlSbtServiceDescription(containerName, databaseName, userName, dbPassword, hostPort, network, None, 5, 5)
     }
@@ -84,7 +84,7 @@ trait MySqlServiceProvider {
         dbIntDir: Option[String],
         imagePullTimeoutInMinutes: Int,
         containerStartTimeoutInMinutes: Int
-    ): SbtMicroservice = {
+    ): SbtService = {
 
       mysqlSbtServiceDescription(
         containerName,
@@ -109,7 +109,7 @@ trait MySqlServiceProvider {
         dbInitDirectory: Option[String],
         imagePullTimeoutInMinutes: Int,
         containerStartTimeoutInMinutes: Int
-    ): SbtMicroservice = {
+    ): SbtService = {
 
       val rootUserPassword = "RootPass@123"
 

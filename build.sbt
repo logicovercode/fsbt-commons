@@ -7,7 +7,7 @@ val sbtBuild = ScalaBuild("com.logicovercode", "fsbt-commons", "0.0.002")
   .testSourceDirectories("dependency-generator")
   .dependencies(
     "com.logicovercode" %% "docker-definitions" % "0.0.007",
-    "com.logicovercode" %% "fsbt-adts" % "0.0.001"
+    "com.logicovercode" %% "fsbt-adts" % "0.0.002"
   )
   .testDependencies(
     "org.scalatest" %% "scalatest" % "3.2.10",

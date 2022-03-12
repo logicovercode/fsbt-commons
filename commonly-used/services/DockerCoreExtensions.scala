@@ -11,7 +11,6 @@ trait DockerCoreExtensions {
     def configurableAttributes(imagePullTimeoutInMinutes: Int, containerStartTimeoutInMinutes: Int): SbtServiceDescription = {
       val sbtServiceDescription =
         SbtServiceDescription(containerDefinition, imagePullTimeoutInMinutes.minutes, containerStartTimeoutInMinutes.minutes)
-      //MicroService(sbtServiceDescription)
       sbtServiceDescription
     }
   }

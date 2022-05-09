@@ -14,7 +14,7 @@ trait PostgresSqlServiceProvider {
         userName: String,
         dbPassword: String,
         dbInitDirectory: String
-    ): SbtMicroservice = {
+    ): SbtService = {
 
       postgresSbtServiceDescription(
         containerName,
@@ -36,7 +36,7 @@ trait PostgresSqlServiceProvider {
         dbPassword: String,
         hostPort: Int,
         dbInitDirectory: String
-    ): SbtMicroservice = {
+    ): SbtService = {
 
       postgresSbtServiceDescription(
         containerName,
@@ -51,12 +51,12 @@ trait PostgresSqlServiceProvider {
       )
     }
 
-    def apply(containerName: String, databaseName: String, userName: String, dbPassword: String): SbtMicroservice = {
+    def apply(containerName: String, databaseName: String, userName: String, dbPassword: String): SbtService = {
 
       postgresSbtServiceDescription(containerName, databaseName, userName, dbPassword, 5432, DockerNetwork("bridge"), None, 5, 5)
     }
 
-    def apply(containerName: String, databaseName: String, userName: String, dbPassword: String, hostPort: Int): SbtMicroservice = {
+    def apply(containerName: String, databaseName: String, userName: String, dbPassword: String, hostPort: Int): SbtService = {
 
       postgresSbtServiceDescription(containerName, databaseName, userName, dbPassword, hostPort, DockerNetwork("bridge"), None, 5, 5)
     }
@@ -68,7 +68,7 @@ trait PostgresSqlServiceProvider {
         dbPassword: String,
         hostPort: Int,
         network: DockerNetwork
-    ): SbtMicroservice = {
+    ): SbtService = {
 
       postgresSbtServiceDescription(containerName, databaseName, userName, dbPassword, hostPort, network, None, 5, 5)
     }
@@ -83,7 +83,7 @@ trait PostgresSqlServiceProvider {
         dbIntDir: Option[String],
         imagePullTimeoutInMinutes: Int,
         containerStartTimeoutInMinutes: Int
-    ): SbtMicroservice = {
+    ): SbtService = {
 
       postgresSbtServiceDescription(
         containerName,
@@ -108,17 +108,17 @@ trait PostgresSqlServiceProvider {
         dbInitDirectory: Option[String],
         imagePullTimeoutInMinutes: Int,
         containerStartTimeoutInMinutes: Int
-    ): SbtMicroservice = {
+    ): SbtService = {
       val imageName: String = "postgres:latest"
       val dbContainerPort = 5432
 
-      val dbContainer = ContainerDefinition(None, "postgres", "latest", Option(containerName))
+      val dbContainer = ContainerDefinition("postgres", "latest", Option(containerName), None)
         .withEnv(
           s"POSTGRES_DB=$databaseName",
           s"POSTGRES_USER=$dbUserName",
           s"POSTGRES_PASSWORD=$dbPassword"
         )
-        .withPorts(dbContainerPort -> Some(hostPort))
+        .withPorts(dbContainerPort -> hostPort)
         .withNetworkMode(network)
         .withReadyChecker(
           DockerReadyChecker.LogLineContains(

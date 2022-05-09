@@ -2,12 +2,12 @@ import com.logicovercode.bsbt.scala_module.ScalaBuild
 
 val githubRepo = githubHosting("logicovercode", "fsbt-commons", "techLeadAtLogicOverCode", "techlead@logicovercode.com")
 
-val sbtBuild = ScalaBuild("com.logicovercode", "fsbt-commons", "0.0.001")
+val sbtBuild = ScalaBuild("com.logicovercode", "fsbt-commons", "0.0.002")
   .sourceDirectories("commonly-used", "generated-dependencies")
   .testSourceDirectories("dependency-generator")
   .dependencies(
-    "com.logicovercode" %% "docker-definitions" % "0.0.005",
-    "com.logicovercode" %% "fsbt-adts" % "0.0.001"
+    "com.logicovercode" %% "docker-definitions" % "0.0.007",
+    "com.logicovercode" %% "fsbt-adts" % "0.0.002"
   )
   .testDependencies(
     "org.scalatest" %% "scalatest" % "3.2.10",
@@ -26,3 +26,6 @@ idePackagePrefix := Some("com.logicovercode.fsbt.commons")
 lazy val fSbtCommonsProject = (project in file("."))
   .settings(sbtBuild.settings)
   //.dependsOn(fSbtAdtsModule)
+
+(publishLocal) := ( (publishLocal).toTask dependsOn (Compile / scalafmt) dependsOn (Test / test) ).value
+

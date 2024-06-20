@@ -2,7 +2,7 @@ import com.logicovercode.bsbt.scala_module.ScalaBuild
 
 val githubRepo = githubHosting("logicovercode", "fsbt-commons", "techLeadAtLogicOverCode", "techlead@logicovercode.com")
 
-val sbtBuild = ScalaBuild("com.logicovercode", "fsbt-commons", "0.0.002")
+val sbtBuild = ScalaBuild("com.logicovercode", "fsbt-commons", "0.0.003")
   .sourceDirectories("commonly-used", "generated-dependencies")
   .testSourceDirectories("dependency-generator")
   .dependencies(

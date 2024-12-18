@@ -4,7 +4,7 @@ package dependencies.spring.dependencies
 import FSbtConvertor._
 
 trait StarterWeb {
-  def starterWeb : String
+  def starterWeb: String
   def starter_web(): FSbtModuleId = {
     ("org.springframework.boot" % "spring-boot-starter-web" % starterWeb)
   }

@@ -15,7 +15,7 @@ val sbtBuild = ScalaBuild("com.logicovercode", "fsbt-commons", "0.0.004")
     "com.github.pathikrit" %% "better-files" % "3.9.1"
   )
   .testResourceDirectories("dependency-generator-config")
-  .scalaVersions(scala_2_13_MaxVersion, Seq(scala_2_13_MaxVersion, scala_2_12_MaxVersion))
+  .scalaVersions("2.13.16", Seq("2.12.20"))
   .javaCompatibility("1.8", "1.8")
   .publish(githubRepo.developer, MIT_License, githubRepo, Opts.resolver.sonatypeStaging)
 
